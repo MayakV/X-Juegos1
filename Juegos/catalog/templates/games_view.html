@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+    <h2>{% trans "PAGE" %} {{ games.number }}</h2>
+    {% if games %}
+        {% load static %}
+        {% for game in games %}
+            <div class="thmb">
+                <a title="{{ game.title }}" href="{{ game.get_absolute_url }}">
+                    <img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" />
+                    <br />{{ game.title|upper }}
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>{% trans "No games :c" %}</p>
+    {% endif %}
+    {% block bar_pages %}
+        <div class="cb"></div>
+        {% if page_type == 'all' %}
+            <div class="hr_b"><a title={% trans "All games" %} href="{% url 'all-games' %}">{% trans "All games" %}</a></div>
+        {% elif page_type == 'new' %}
+            <div class="hr_g"><a title={% trans "All New games" %} href="{% url 'new-games' %}">{% trans "All New games" %}</a></div>
+        {% else %}
+            <div class="hr_r"><a title={% trans "All TOP games" %} href="{% url 'top-games' %}">{% trans "All TOP games" %}</a></div>
+        {% endif %}
+        {% block pagination %}
+            {% if is_paginated %}
+                <div class="lnks">
+                    <a href="{{ first_page }}"><<</a>
+                    <a href="{{ prev_page }}"><</a>
+                    {% for i in pages_to_display %}
+                        {% if i == games.number %}
+                            {% if page_type == 'all' %}
+                                <span class="page_b">{{ i }}</span>
+                            {% elif page_type == 'new' %}
+                                <span class="page_g">{{ i }}</span>
+                            {% else %}
+                                <span class="page_r">{{ i }}</span>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ any_page }}{{ i }}/">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    <a href="{{ next_page }}">></a>
+                    <a href="{{ last_page }}">>></a>
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endblock %}
+    {% if categories %}
+        <div id="cats">
+            {% block cats %}
+                {% load splitter %}
+                {% for column in categories|split_to_columns:10 %}
+                    <ul>
+                        {% for cat in column %}
+                            <li><a title="{% trans 'Play New' %} {{ cat.name }}" href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            {% endblock %}
+        </div>
+        <div class = "cb"></div>
+    {% endif %}
+    {% if all_games %}
+        {% block bar_all %}
+            <div class="cb"></div>
+            <div class="hr_b"><a title={% trans "All games" %} href="{% url 'all-games' %}">{% trans "All games" %}</a></div>
+            {% if category %}
+                <div class="lnks_sub">
+                    <a title="All {{ category.name }}" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                </div>
+            {% endif %}
+            <p></p>
+        {% endblock %}
+    {% endif %}
+    {% if new_games %}
+        {% block bar_new %}
+            <h2>{% trans "NEW" %} {% if category %}{{ category.name }}{% else %}{% trans "GAMES" %}{% endif %}</h2>
+            {% for game in new_games %}
+                <div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+            {% endfor %}
+            <div class="cb"></div>
+            <div class="hr_g"><a title={% trans "All New games" %} href="{% url 'new-games' %}">{% trans "All New games" %}</a></div>
+            {% if category %}
+                <div class="lnks_sub">
+                    <a title="{% trans 'All' %} {{ category.name }}" href="{{ category.get_new_url }}">{{ category.name }}</a>
+                </div>
+            {% endif %}
+            <p></p>
+        {% endblock %}
+    {% endif %}
+    {% if top_games %}
+        {% block bar_top %}
+            <h2>{% trans "TOP" %} {% if category %}{{ category.name }}{% else %}{% trans "GAMES" %}{% endif %}</h2>
+            {% for game in top_games %}
+                <div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+            {% endfor %}
+            <div class="cb"></div>
+            <div class="hr_r"><a title={% trans "All TOP games" %} href="{% url 'top-games' %}">{% trans "All TOP games" %}</a></div>
+            {% if category %}
+                <div class="lnks_sub">
+                    <a title="{% trans 'All' %} {{ category.name }}" href="{{ category.get_top_url }}">{{ category.name }}</a>
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+	{% load static %}
+	<h2>{% trans "SECTIONS" %}</h2>
+	{% for cat in categories %}
+		<div class="thmb"><a title={{ cat.slug }} href="{% url 'all-games-category' cat.slug %}"><img src="{% static cat.get_image_path %}" alt={{ cat.name }} width="116" height="100" /><br />{{ cat.name|upper }}</a></div>
+	{% endfor %}
+	<div class="cb"></div>
+	<div class="hr_b"><a title="{% trans 'Games online' %}" href="{% url 'all-games' %}">{% trans "All online games" %}</a></div>
+	<p></p><p></p>
+	<h2>{% trans "All online games" %}</h2>
+	{% for game in new_games %}
+		<div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+	{% endfor %}
+	<div class="cb"></div>
+	<div class="hr_g"><a title="{% trans 'All New games' %}" href="{% url 'new-games' %}">{% trans "New games" %}</a></div>
+	<p></p><p></p>
+	<h2>{% trans "TOP - BEST" %}</h2>
+	{% for game in top_games %}
+		<div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+	{% endfor %}
+	<div class="cb"></div>
+	<div class="hr_r"><a title="{% trans 'All TOP games' %}" href="{% url 'top-games' %}">{% trans "TOP games" %}</a></div>
+	<p></p><p></p>
+	<h2>{% trans "BE ONLINE WHEN PLAYING GAME" %}</h2>
+	<div class="descf">
+	{% blocktrans %}
+	<p>Often each of us faces challenges at work. Few people have thought about this, but many of them can be solved with the help of <b>online games</b>. Laying out a game of solitaire or Mahjong, solving the quest or shooting the ball, or shifting their attention to the game of any other genre, you can get away from the haunting thoughts, to temporarily stop thinking about them. Such a distraction, no doubt, will have a beneficial effect on your general condition and performance.</p>
+	<p>In addition, short gameplay presented on our website stories, will not make you completely retire from the business. While playing, you will continue to solve current tasks in the background mode somewhere deep inside of your mind and, believe us, will benefit from this. Many visitors are positive about the unloading of the brain with the help of a short game. Just try, play a game staying online! Exploring the game catalog above, new ones section or most popular top games desk, you can find a best one special for your current state.</p>
+	{% endblocktrans %}
+	</div>
+{% endblock %}

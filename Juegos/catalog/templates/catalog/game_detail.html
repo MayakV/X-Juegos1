@@ -1,0 +1,91 @@
+{% extends "games_view.html" %}
+{% load i18n %}
+{% block css %}
+    {% load static %}
+    	<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all"/>
+{% endblock %}
+{% block sidebar %}
+    <div class="sidebar" id="sideLeft">
+        <div id="menu">
+            {% load splitter %}
+            {% for column in categories|split_to_columns:10 %}
+            <ul>
+                {% for cat in column %}
+                <li><a title="{% trans 'Play New' %} {{ cat.name }}" href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
+        <div class = "cb"></div>
+    </div>
+{% endblock %}
+{% block content %}
+    <h2>{% trans "RULES AND FEATURES" %}</h2>
+    <div class="descf">
+        <p>{% trans "Long description here..." %}</p>
+    </div>
+    <div class = "banner">
+        <!-- banner code here -->
+    </div>
+    <div class="fsmode" id="s">
+        <a href="#s" title="{% trans 'Increase size' %}" onclick="$('#gm_cont').height($('#gm_cont').height() + 30);$('#content iframe').height($('#gm_cont').height())">( + )</a> &bull; <a title="{% trans 'Decrease size' %}" href="#s" onclick="$('#gm_cont').height($('#gm_cont').height() - 30);$('#content iframe').height($('#gm_cont').height())">( &ndash; )</a> &bull; <a title="{% trans 'Set original size' %}" href="#s" onclick="$('#gm_cont').css({'height':'600px','width':'800px'});$('#content iframe').css({'height':'600px','width':'800px'})">(800x600)</a> &bull; <a title="{% trans 'Full screen mode (game opens in new window)' %}" href="#s" onclick="window.open('{{ game_object.get_fullscreen_url }}', '_blank');">{% trans "Full screen" %}</a>
+
+    </div>
+    <div class="swf" id="gm_cont">
+        <!--googleoff: index--><!--noindex-->
+        <!--
+            That's how it should be done so it will work in test and prod
+        <iframe src="{ url 'game-detail-fullscreen' game_object.slug }" scrolling="no" id="iframe"></iframe>
+        -->
+        <iframe src="{{ game_object.get_fullscreen_url }}" scrolling="no" id="iframe"></iframe>
+        <!--/noindex--><!--googleon: index-->
+    </div>
+    <p>{% trans "You can play the game" %} <b>{{ game_object.title }}</b> {% trans "online 24 hours a day for free. It is no need to download and install it on your computer, and it is also not required you to be the registered user. Just ckick and enjoy. See also a set of related games below on that you might be interested to look." %}<br /><br /></p>
+    {% if related_games %}
+        <h3>{% trans "RELATED Games" %}</h3>
+        {% load static %}
+        {% for game in related_games %}
+                <div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+        {% endfor %}
+        <div class="cb"></div>
+        <div class="hr_b"><a title={% trans "All games" %} href={ % url 'all-games' %}>{% trans "All games" %}</a></div>
+        {% if category %}
+        <div class="lnks">
+            <a title="All {{ category.name }}" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+        </div>
+        {% endif %}
+        <p></p>
+    {% endif %}
+    {% if new_games %}
+        {% block bar_new %}
+            <h3>{% trans "NEW" %} {% if category %}{{ category.name }}{% else %}{% trans "GAMES" %}{% endif %}</h3>
+            {% load static %}
+            {% for game in new_games %}
+                <div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+            {% endfor %}
+            <div class="cb"></div>
+            <div class="hr_g"><a title={% trans "All New games" %} href="{% url 'new-games' %}">{% trans "All New games" %}</a></div>
+            {% if category %}
+                <div class="lnks">
+                    <a title="All {{ category.name }}" href="{{ category.get_new_url }}">{{ category.name }}</a>
+                </div>
+            {% endif %}
+            <p></p>
+        {% endblock %}
+    {% endif %}
+    {% if top_games %}
+        {% block bar_top %}
+            <h3>{% trans "TOP" %} {% if category %}{{ category.name }}{% else %}{% trans "GAMES" %}{% endif %}</h3>
+            {% for game in top_games %}
+                <div class="thmb"><a title="{{ game.title }}" href="{{ game.get_absolute_url }}"><img src="{% static game.get_thumbnail_path %}" alt="{{ game.title }}" width="116" height="100" /><br />{{ game.title }}</a></div>
+            {% endfor %}
+            <div class="cb"></div>
+            <div class="hr_r"><a title={% trans "All TOP games" %} href="{% url 'top-games' %}">{% trans "All TOP games" %}</a></div>
+            {% if category %}
+                <div class="lnks">
+                    <a title="{% trans 'All' %} {{ category.name }}" href="{{ category.get_top_url }}">{{ category.name }}</a>
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endif %}
+{% endblock %}

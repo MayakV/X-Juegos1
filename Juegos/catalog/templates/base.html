@@ -1,0 +1,51 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	{# Translators: Site title #}
+	<title>{% trans "Free Online Games - TOP and New, Best and Recent" %}</title>
+	{# Translators: Keywords for Google #}
+	<meta name="keywords" content={% trans "free online games, top, ranking, new, best, recent" %} />
+	{# Translators: Site description #}
+	<meta name="description" content={% trans "What if the time for relax quite a bit, just five or ten minutes? Free online games is a great helper to pass such a short time!"  %}/>
+	{% block css %}
+    {% load static %}
+    	<link rel="stylesheet" href="{% static 'css/stylei.css' %}"/>
+	{% endblock %}
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="author" content="X-Juegos" />
+</head>
+
+<body>
+
+<div id="wrapper">
+
+	<div id="header">
+		{% block header_logo %}<img src="/img/x-juegos.png" alt="" class="lg0" width="110" height="100" />{% endblock %}
+		{% block header %}<h1>{% trans "FREE ONLINE GAMES" %}</h1>{% endblock %}
+        {% block header_text %}<p>{% trans "Favourite way to relax after work" %}</p>{% endblock %}
+	</div>
+
+	<div id="middle">
+		<div id="container">
+			<div id="content">{% block content %}{% endblock %}</div>
+		</div>
+		{% block sidebar %}{% endblock %}
+	</div>
+
+	<div id="footer">
+		{% block footer_logo %}<img src="/img/x-jgs.png" alt="X-juegos" class="lg1" width="50" height="31" /><div class="cnt">{% endblock %}
+<!--
+GA code here
+<script>
+</script>
+-->
+    </div>
+		{# Translators: Footer text (at the bottom) #}
+        {% block footer_text %}<p><a title="Free Online Games" href="/">{% trans "Free Online Games" %}</a>{% get_current_language as LANGUAGE_CODE %} {{ LANGUAGE_CODE }}{% trans ". Every day and every night we offer you to play for free, adding new games and entertainment for your enjoyment. You are welcome 24 hours a day, and we are hoping to cheer you up." %}</p>{% endblock %}
+	</div>
+</div>
+</body>
+</html>
